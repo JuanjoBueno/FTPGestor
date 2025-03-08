@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileMonitor {
+public class FileMonitor implements Runnable {
 
     private String localFolder;
 
@@ -43,5 +43,10 @@ public class FileMonitor {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void run() {
+        monitor();
     }
 }
