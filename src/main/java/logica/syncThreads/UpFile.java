@@ -7,8 +7,10 @@ import java.io.*;
 public class UpFile implements Runnable {
 
     private String path;
+    private String remoteFolder;
 
-    public UpFile(String path) {
+    public UpFile(String path, String remoteFolder) {
+        this.remoteFolder = remoteFolder;
         this.path = path;
     }
 
@@ -32,7 +34,7 @@ public class UpFile implements Runnable {
                 ftpManager.getClienteFTP().deleteFile(file.getName());
             }
             InputStream isAES = new ByteArrayInputStream(contenidoAES.getBytes());
-            boolean success = ftpManager.getClienteFTP().storeFile(file.getName(), isAES);
+            boolean success = ftpManager.getClienteFTP().storeFile( remoteFolder + file.getName(), isAES);
             isAES.close();
 
             if (success) {

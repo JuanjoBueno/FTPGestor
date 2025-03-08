@@ -10,9 +10,11 @@ import java.util.Map;
 public class FileMonitor implements Runnable {
 
     private String localFolder;
+    private String remoteFolder;
 
-    public FileMonitor(String localFolder) {
+    public FileMonitor(String localFolder, String remoteFolder) {
         this.localFolder = localFolder;
+        this.remoteFolder = remoteFolder;
     }
 
     public void monitor() {
@@ -31,14 +33,14 @@ public class FileMonitor implements Runnable {
 
                     if (!oldFilesMap.containsKey(file.getName()) || oldFilesMap.get(file.getName()) != file.lastModified()) {
                         //implementacion de la sincronizacion
-                        new Thread(new UpFile(file.getPath())).start();
+                        new Thread(new UpFile(file.getPath(), remoteFolder)).start();
                     }
                 }
             }
             for (String fileName : oldFilesMap.keySet()) {
                 if (!filesMap.containsKey(fileName)) {
                     //implementacion de la sincronizacion
-                    new Thread(new DeleteFile(fileName)).start();
+                    new Thread(new DeleteFile(fileName, remoteFolder)).start();
                 }
             }
             oldFilesMap = filesMap;
