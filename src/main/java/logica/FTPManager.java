@@ -9,21 +9,21 @@ import java.io.IOException;
 public class FTPManager {
 
     private FTPClient clienteFTP;
-    private final String server;
-    private final int port;
-    private final String user;
-    private final String password;
+    private final String SERVER = "localhost";
+    private final int PORT = 21;
+    private final String USER = "user";
+    private final String PASSWORD = "password";
 
-    public FTPManager(String server, int port, String user, String password) {
-        this.server = server;
-        this.port = port;
-        this.user = user;
-        this.password = password;
-        this.clienteFTP = new FTPClient();
+    public FTPManager() {
+        clienteFTP = new FTPClient();
     }
 
-    private void connect() throws IOException {
-        clienteFTP.connect(server, port);
+    public FTPClient getClienteFTP() {
+        return clienteFTP;
+    }
+
+    public void connect() throws IOException {
+        clienteFTP.connect(SERVER, PORT);
         int respuesta = clienteFTP.getReplyCode();
 
         if (!FTPReply.isPositiveCompletion(respuesta)) {
@@ -31,7 +31,7 @@ public class FTPManager {
             throw new IOException("Error al conectar con el servidor FTP");
         }
 
-        if (!clienteFTP.login(user, password)) {
+        if (!clienteFTP.login(USER, PASSWORD)) {
             clienteFTP.logout();
             throw new IOException("Error: credenciales incorrectas.");
         }
@@ -40,7 +40,7 @@ public class FTPManager {
         clienteFTP.setFileType(FTP.BINARY_FILE_TYPE);
     }
 
-    private void disconnect() {
+    public void disconnect() {
         try {
             if (clienteFTP.isConnected()) {
                 clienteFTP.logout();
