@@ -2,17 +2,20 @@ package logica;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FTPManager {
 
     private FTPClient clienteFTP;
     private final String SERVER = "localhost";
     private final int PORT = 21;
-    private final String USER = "user";
-    private final String PASSWORD = "password";
+    private final String USER = "juanjobueno";
+    private final String PASSWORD = "_Noa007_";
 
     public FTPManager() {
         clienteFTP = new FTPClient();
@@ -49,6 +52,20 @@ public class FTPManager {
         } catch (IOException e) {
             System.err.println("Error al desconectar: " + e.getMessage());
         }
+    }
+
+    public List<String> listarArchivosRemotos(String remoteFolder) throws IOException {
+        List<String> archivos = new ArrayList<>();
+        FTPFile[] files = clienteFTP.listFiles(remoteFolder);
+
+        if (files != null) {
+            for (FTPFile file : files) {
+                if (file.isFile()) {  // Solo agregar archivos, no carpetas
+                    archivos.add(file.getName());
+                }
+            }
+        }
+        return archivos;
     }
 
 
