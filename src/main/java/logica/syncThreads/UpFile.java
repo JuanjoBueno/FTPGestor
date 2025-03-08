@@ -28,7 +28,9 @@ public class UpFile implements Runnable {
             fis.close();
 
             String contenidoAES = AESSimpleManager.cifrar(new String(contenido), AESSimpleManager.obtenerClave("password", 32));
-
+            if (ftpManager.getClienteFTP().listNames(file.getName()) != null) {
+                ftpManager.getClienteFTP().deleteFile(file.getName());
+            }
             InputStream isAES = new ByteArrayInputStream(contenidoAES.getBytes());
             boolean success = ftpManager.getClienteFTP().storeFile(file.getName(), isAES);
             isAES.close();

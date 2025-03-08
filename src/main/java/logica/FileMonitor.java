@@ -1,5 +1,8 @@
 package logica;
 
+import logica.syncThreads.DeleteFile;
+import logica.syncThreads.UpFile;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +31,14 @@ public class FileMonitor implements Runnable {
 
                     if (!oldFilesMap.containsKey(file.getName()) || oldFilesMap.get(file.getName()) != file.lastModified()) {
                         //implementacion de la sincronizacion
+                        new Thread(new UpFile(file.getPath())).start();
                     }
                 }
             }
             for (String fileName : oldFilesMap.keySet()) {
                 if (!filesMap.containsKey(fileName)) {
                     //implementacion de la sincronizacion
+                    new Thread(new DeleteFile(fileName)).start();
                 }
             }
             oldFilesMap = filesMap;
