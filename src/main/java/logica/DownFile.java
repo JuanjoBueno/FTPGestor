@@ -9,11 +9,13 @@ import java.nio.file.Paths;
 import java.security.Key;
 import java.util.Scanner;
 
+// Clase para descargar archivos de un servidor FTP
 public class DownFile {
     private static final String DOWN_FOLDER = "/Users/juanjobueno/Desktop/DescargasNubesilla/";
     private static final String FTP_FOLDER = "/";
     private static final String AES_PASSWORD = "MiguelAngelgraciasporelcursodeLosMasInteresantes";
 
+    //Metodo para descargar un archivo de un servidor FTP
     private static void descargarArchivo(String archivoRemoto, String destinoLocal) {
         try {
             FTPManager ftpManager = new FTPManager();
@@ -23,6 +25,7 @@ public class DownFile {
                 boolean success = ftpManager.getClienteFTP().retrieveFile(FTP_FOLDER + archivoRemoto, outputStream);
                 if (success) {
                     System.out.println("Archivo descargado: " + destinoLocal);
+                    //Llamar a la función para descifrar el archivo
                     descifrarArchivo(destinoLocal);
                 } else {
                     System.out.println("No se encontró el archivo en el servidor FTP.");
@@ -34,11 +37,15 @@ public class DownFile {
         }
     }
 
+    //Metodo para descifrar un archivo
     private static void descifrarArchivo(String archivoCifrado) {
 
         try {
+            //Texto cifrado
             String textoCifrado = new String(Files.readAllBytes(Paths.get(archivoCifrado)));
+            //Clave de descifrado
             Key clave = AESSimpleManager.obtenerClave(AES_PASSWORD, 32);
+            //Descifrar y asignar texto original
             String textoDescifrado = AESSimpleManager.descifrar(textoCifrado, clave);
 
             try (FileOutputStream fos = new FileOutputStream(archivoCifrado)) {
@@ -53,6 +60,7 @@ public class DownFile {
         }
     }
 
+    //Metodo para listar los archivos remotos
     private static void listarArchivosRemotos() {
         try {
             FTPManager ftpManager = new FTPManager();
@@ -75,9 +83,11 @@ public class DownFile {
         try {
             FTPManager ftpManager = new FTPManager();
             ftpManager.connect();
+            //Listar los archivos remotos para elegir
             listarArchivosRemotos();
 
             String archivoRemoto = teclado.nextLine();
+            //Llamar a la función para descargar el archivo
             descargarArchivo(archivoRemoto, DOWN_FOLDER + archivoRemoto);
             ftpManager.disconnect();
 

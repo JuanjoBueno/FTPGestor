@@ -16,6 +16,8 @@ public class UpFile implements Runnable {
 
     @Override
     public void run() {
+
+        // Verificar si el archivo existe
         File file = new File(path);
         if (!file.exists()) {
             System.err.println("El archivo no existe: " + path);
@@ -28,19 +30,19 @@ public class UpFile implements Runnable {
             FTPManager ftpManager = new FTPManager();
             ftpManager.connect();
 
-            // Leer el archivo en bytes
+            // Leer el archivo
             byte[] contenido;
             try (FileInputStream fis = new FileInputStream(file)) {
                 contenido = fis.readAllBytes();
             }
 
-            // Cifrar contenido con AES
+            // Cifrar contenido
             String contenidoAES = AESSimpleManager.cifrar(
                     new String(contenido),
                     AESSimpleManager.obtenerClave("MiguelAngelgraciasporelcursodeLosMasInteresantes", 32)
             );
 
-            // Verificar si el archivo ya existe y eliminarlo
+            // Verificar si es una modificacion y borrar si es necesario
             if (ftpManager.getClienteFTP().listNames(remoteFolder + file.getName()) != null) {
                 ftpManager.getClienteFTP().deleteFile(remoteFolder + file.getName());
             }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// Clase para manejar la comunicación con el servidor FTP
 public class FTPManager {
 
     private FTPClient clienteFTP;
@@ -21,14 +22,17 @@ public class FTPManager {
         clienteFTP = new FTPClient();
     }
 
+    // Getters
     public FTPClient getClienteFTP() {
         return clienteFTP;
     }
 
+    //Metodo de conexion
     public void connect() throws IOException {
         clienteFTP.connect(SERVER, PORT);
         int respuesta = clienteFTP.getReplyCode();
 
+        // Verificar si la conexión fue exitosa
         if (!FTPReply.isPositiveCompletion(respuesta)) {
             clienteFTP.disconnect();
             throw new IOException("Error al conectar con el servidor FTP");
@@ -43,6 +47,7 @@ public class FTPManager {
         clienteFTP.setFileType(FTP.BINARY_FILE_TYPE);
     }
 
+    //Metodo de desconexion
     public void disconnect() {
         try {
             if (clienteFTP.isConnected()) {
@@ -53,22 +58,4 @@ public class FTPManager {
             System.err.println("Error al desconectar: " + e.getMessage());
         }
     }
-
-    public List<String> listarArchivosRemotos(String remoteFolder) throws IOException {
-        List<String> archivos = new ArrayList<>();
-        FTPFile[] files = clienteFTP.listFiles(remoteFolder);
-
-        if (files != null) {
-            for (FTPFile file : files) {
-                if (file.isFile()) {  // Solo agregar archivos, no carpetas
-                    archivos.add(file.getName());
-                }
-            }
-        }
-        return archivos;
-    }
-
-
-
-
 }

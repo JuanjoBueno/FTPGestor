@@ -13,6 +13,8 @@ public class DeleteFile implements Runnable {
         this.pathName = pathName;
         this.remoteFolder = remoteFolder;
     }
+
+    //implementacion hilo para borrar archivos
     @Override
     public void run() {
         FTPManager ftpManager = new FTPManager();

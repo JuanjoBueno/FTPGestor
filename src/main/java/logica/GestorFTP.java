@@ -4,6 +4,7 @@ import java.io.File;
 
 public class GestorFTP {
 
+    //Clase principal
     public static void main(String[] args) {
         String localFolder = "/Users/juanjobueno/Desktop/DesktopNube/";
         String remoteFolder = "/";
@@ -15,6 +16,7 @@ public class GestorFTP {
             System.out.println("Carpeta 'nubesita' creada.");
         }
 
+        //Instanciamos el monitor y lanzamos el hilo
         FileMonitor fileMonitor = new FileMonitor(localFolder, remoteFolder);
         new Thread(fileMonitor).start();
 

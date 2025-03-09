@@ -7,11 +7,13 @@ import java.util.Base64;
 
 public class AESSimpleManager {
 
+    //Metodo para obtener la clave
     public static Key obtenerClave (String password, int longitud) {
         Key clave = new SecretKeySpec(password.getBytes (), 0, longitud, "AES");
         return clave;
     }
 
+    //Metodo para cifrar
     public static String cifrar (String textoEnClaro, Key key) throws Exception {
         Cipher cipher = Cipher. getInstance ("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -19,6 +21,7 @@ public class AESSimpleManager {
         return Base64.getEncoder().encodeToString(cipherText);
     }
 
+    //Metodo para descifrar
     public static String descifrar (String textoCifrado, Key key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding") ;
         cipher.init(Cipher.DECRYPT_MODE, key) ;
